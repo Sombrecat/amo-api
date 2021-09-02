@@ -94,4 +94,45 @@ class AmoClient
         file_put_contents(static::$file_path, json_encode($response));
     }
 
+    /**
+     * Метод проверяет срок действия токена
+     * Если он истек, то метод его обновляет
+     *
+     * @return string - access token
+     */
+    public function getToken(): string
+    {
+        $data_file = json_decode(file_get_contents(static::$file_path), true);
+        $token_term = $data_file['expires_in'];
+
+        try {
+            if (!file_exists(static::$file_path) and empty($data_file)) {
+                throw new \Exception('Попробуйте авторизоваться заново');
+            }
+        }
+        catch (\Exception $e) {
+            die('Ошибка: ' . $e->getMessage() . PHP_EOL . 'Код ошибки: ' . $e->getCode());
+        }
+
+        if (time() > $token_term) {
+            $req_data = [];
+            $req_url = static::$url . '/oauth2/access_token';
+
+            foreach ($this->client_data as $key => $value) {
+                $req_data[$key] = $value;
+                $req_data['grant_type'] = 'refresh_token';
+                $req_data['refresh_token'] = $data_file['refresh_token'];
+            }
+
+            $response = static::sendRequest($req_url, 'POST', $req_data);
+            $response['expires_in'] += time();
+
+            file_put_contents(static::$file_path, json_encode($response));
+
+            return $response['access_token'];
+        }
+
+        return $data_file['access_token'];
+    }
+
 }
