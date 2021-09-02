@@ -1,0 +1,17 @@
+{
+    "name": "jarvis/amo-api",
+    "autoload": {
+        "psr-4": {
+            "Jarvis\\AmoApi\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Павел Сучилов",
+            "email": "suchilov@f5.com.ru"
+        }
+    ],
+    "require": {
+      "ext-curl": "*"
+    }
+}
