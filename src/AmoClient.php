@@ -89,50 +89,52 @@ class AmoClient
         }
 
         $response = static::sendRequest($req_url, 'POST', $req_data);
-        $response['expires_in'] += time();
-
-        file_put_contents(static::$file_path, json_encode($response));
+        $this->saveToken($response);
     }
 
     /**
-     * Метод проверяет срок действия токена
-     * Если он истек, то метод его обновляет
+     * Метод сохраняет токены в файл
      *
-     * @return string - access token
+     * @param array $data - токены
      */
-    public function getToken(): string
+    public function saveToken(array $data)
     {
-        $data_file = json_decode(file_get_contents(static::$file_path), true);
-        $token_term = $data_file['expires_in'];
+        $data['expires_in'] += time();
+
+        file_put_contents(static::$file_path, json_encode($data));
+    }
+
+    /**
+     * Метод проверяет актуальность токена
+     * Если срок действия закончился, то функция его обновляет
+     */
+    public function getUpdateToken()
+    {
+        $token_data = json_decode(file_get_contents(static::$file_path), true);
 
         try {
-            if (!file_exists(static::$file_path) and empty($data_file)) {
-                throw new \Exception('Попробуйте авторизоваться заново');
+            if (file_exists(static::$file_path) and empty($token_data)) {
+                throw new \Exception('Повторите попытку авторизации');
             }
         }
-        catch (\Exception $e) {
+        catch(\Exception $e)
+        {
             die('Ошибка: ' . $e->getMessage() . PHP_EOL . 'Код ошибки: ' . $e->getCode());
         }
 
-        if (time() > $token_term) {
+        if (time() > $token_data['expires_in']) {
             $req_data = [];
             $req_url = static::$url . '/oauth2/access_token';
 
             foreach ($this->client_data as $key => $value) {
                 $req_data[$key] = $value;
                 $req_data['grant_type'] = 'refresh_token';
-                $req_data['refresh_token'] = $data_file['refresh_token'];
+                $req_data['refresh_token'] = $token_data['refresh_token'];
             }
 
             $response = static::sendRequest($req_url, 'POST', $req_data);
-            $response['expires_in'] += time();
-
-            file_put_contents(static::$file_path, json_encode($response));
-
-            return $response['access_token'];
+            $this->saveToken($response);
         }
-
-        return $data_file['access_token'];
     }
 
 }
