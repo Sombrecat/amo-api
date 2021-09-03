@@ -2,11 +2,14 @@
 
 namespace Jarvis\AmoApi;
 
+use Jarvis\AmoApi\Entitys\Companies;
+use JetBrains\PhpStorm\Pure;
+
 class AmoClient
 {
 
     protected array $client_data;
-    protected static string $url;
+    public static string $url;
     protected static string $file_path;
 
     public function __construct($client_data)
@@ -39,7 +42,11 @@ class AmoClient
         curl_setopt($curl,CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl,CURLOPT_HEADER, false);
         curl_setopt($curl,CURLOPT_CUSTOMREQUEST, $method);
-        curl_setopt($curl,CURLOPT_POSTFIELDS, json_encode($data));
+
+        if ($method = 'POST') {
+            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
+        }
+
         curl_setopt($curl,CURLOPT_SSL_VERIFYPEER, 1);
         curl_setopt($curl,CURLOPT_SSL_VERIFYHOST, 2);
         $out = curl_exec($curl);
@@ -108,7 +115,7 @@ class AmoClient
      * Метод проверяет актуальность токена
      * Если срок действия закончился, то функция его обновляет
      */
-    public function getUpdateToken()
+    public function getUpdateToken(): string
     {
         $token_data = json_decode(file_get_contents(static::$file_path), true);
 
@@ -134,7 +141,20 @@ class AmoClient
 
             $response = static::sendRequest($req_url, 'POST', $req_data);
             $this->saveToken($response);
+
+            return $response['access_token'];
         }
+
+        return $token_data['access_token'];
+    }
+
+    /**
+     * @return Companies - свойства и методы контактов
+     */
+    #[Pure]
+    public function contacts(): Companies
+    {
+        return new Companies($this);
     }
 
 }
