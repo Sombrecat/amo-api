@@ -7,40 +7,31 @@ use Jarvis\AmoApi\AmoClient;
 class Entity
 {
 
-    public AmoClient $client;
-    public static $entity_type;
-    public static string $path;
-    public array $simple_field;
+    protected AmoClient $client;
+    protected static string $path;
+    protected static string $entity_type;
+    protected static string $req_url;
+    protected string $access_token;
 
-    public function __construct(AmoClient $client, array $simple_field = [])
+    public function __construct(AmoClient $client)
     {
         $this->client = $client;
-        $this->simple_field = $simple_field;
+        $this->access_token = $this->client->getUpdateToken();
+        static::$req_url = AmoClient::$url . static::$path;
     }
 
-    /**
-     * Создаем поля и присваиваем им значения
-     *
-     * @param string $name - ключ массива
-     * @param mixed $value - значение ключа
-     */
-    public function __set(string $name, mixed $value)
-    {
-        $this->simple_field[$name] = $value;
-    }
-
-    /**
-     * Метод обращается к сущности по id
-     *
-     * @param int $id - id сущности
-     * @return array - массив с данными сущности
-     */
     public function getById(int $id): array
     {
-        $req_url = AmoClient::$url . static::$path . '/' . $id;
-        $access_token = $this->client->getUpdateToken();
+        $url = static::$req_url . '/' . $id;
 
-        return AmoClient::sendRequest($req_url, 'GET', null, $access_token);
+        return AmoClient::sendRequest($url, 'GET', [], $this->access_token);
+    }
+
+    public function create(array $data = [])
+    {
+        $response = AmoClient::sendRequest(static::$req_url, 'POST', [$data], $this->access_token);
+
+        return $response['_embedded'][static::$entity_type][0];
     }
 
 }

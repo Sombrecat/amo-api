@@ -2,8 +2,7 @@
 
 namespace Jarvis\AmoApi;
 
-use Jarvis\AmoApi\Entitys\Companies;
-use JetBrains\PhpStorm\Pure;
+use Jarvis\AmoApi\Entitys\Contact;
 
 class AmoClient
 {
@@ -149,12 +148,11 @@ class AmoClient
     }
 
     /**
-     * @return Companies - свойства и методы контактов
+     * @return Contact - вызываем конструктор класса Contact
      */
-    #[Pure]
-    public function contacts(): Companies
+    public function contact(): Contact
     {
-        return new Companies($this);
+        return new Contact($this);
     }
 
 }
