@@ -34,4 +34,11 @@ class Entity
         return $response['_embedded'][static::$entity_type][0];
     }
 
+    public function update(array $data): array
+    {
+        $url = static::$req_url . '/' . $data['id'];
+
+        return AmoClient::sendRequest($url, 'PATCH', [$data], $this->access_token);
+    }
+
 }

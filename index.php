@@ -11,13 +11,17 @@ use Jarvis\AmoApi\AmoClient;
 $client_data = [
     'domain'        => 'dlatestov',
     'client_id'     => '3a36eef8-28c7-41f0-838c-84fbd4687c81',
-    'client_secret' => 'Z4tW7gnGuB3ivA5otMcPhNraYabTxt4zliZrtTLohrfaxWVPX2vBVmiYxEZI7jVY',
+    'client_secret' => 'UncxD8W9ALM6Lr2KjHhGjpWG5jZyjnpGd8pKJOtmicbdmFH5muOKER4HS0hdFFZi',
     'redirect_uri'  => 'https://example.com'
 ];
 
 $client = new AmoClient($client_data);
-//$client->authByCode('def50200eed884ee34ecedf056a7350013598dbeff00a3a09667488eb5f69f388607af9b2b9c622feaa508a6a7270c4cecdd1cb8306fa5a6fc6b2890e6ded81bcb3b14b9fd8c79e2a1a43a5bb1d7decc86f5aaef18ac0da3b329ff92889479e91d4e19806695a4c7e3dc2e6116d7c14edf6cf638dfd4a589a30744f426c4b1ca425edd72e327a782839563f844172d6d6b03eeea152719e7a63baa9aba2f2bc018ce9138b56b0b88f75080cb41ecccba0d219f3e0f1c823bbb841b4116ee5753eb3cf615f269d6dd5c5d659acc4e12f591e75d4a6be5e6ae9f1cffcac0862d357b92609874c3ace7691d70ae54572fc99dabcb26436ff585df319b93bba10f6856df11608bbe05c650b232750c395d842c93da5f1fe499499ce6778a89346d71cb29746b23c977a9e3b47aa1f79fcfb360488c6cb3de21d99f8ab5199013c82f61b737a5a2e581378235669f9a83963481b43bc6354fca049fa44b9cf536532dee409387ac0c20f6c020de8cac058678fe82601989de783cb750a0532aa47de7711b90bce55fea622e1980c840afa10411165d1ab6cd5fb2ec1e60e098da6f85a8065d2619a7cdf8804d7f8cd920cd34481619d4f450042ba1d32f');
+//$client->authByCode('def50200d91b0fd0cf5fca114ac4d45af6c087ee29405f3307ebeff83819d3ea97acb52759aa3eee8502e76ccdd20c9a7d5846149b044f9976f0584937f588e72e113af180461159c1c20a22a0e4ccc0ff2f50788c5a635e00a35d7ecbb8a61fad7521e95eaf1593481f728db2cf115024ee354b9a420a30a7039de4d8ebe24946a71852e459ddaa333c5aefc03ba5441049f3689d677079b82582b23ee281c23d5314a6a864ca39a50254adaca529dbd298f32eca6bc57930acde452fcf347671af9e8dae6da43ebf8f9d8bc42e52af95b5ae4e5be23125e30bd71b2479139bb542e6fadc3b2c7723d2926ebf2537b700899974fc0d1d2956728b0114b8c1e15d770b417e6a8a7bc54a30d01b9f80829760db9ad8e6b1fac53813bc8e750442a6653aa5c1626c07213c350da16687bac41f5ec9f98a469187dcc6a4ab49c76afe5340d0a99a38fb93499a23fcb20f87684c05b429a6c8772bc765a7d747799451e26ee3ec3e326e485d2ffdf4fdbc87c223a0a973aa63312ea1801e2eb670d9a1f36ed7cfdc5e5d908a373303762610b0a44ffd8c8e1cf4e4c5fbcafde451b7133dc460e89b91fe99ae4de2c18c74aae944954651bdff01873bb3');
 //$client->getUpdateToken();
 
-$contact = $client->contacts();
-$new_contacts = $contact->getById(45697165);
+//$lead = $client->contact();
+//$new_lead = $lead->getById(45708301);
+//print_r($new_lead) . '<br>';
+
+$contact = $client->contact()->create(['first_name' => 'Vladimir', 'last_name' => 'Putin']);
+$client->contact()->update($contact);
