@@ -23,5 +23,7 @@ $client = new AmoClient($client_data);
 //$new_lead = $lead->getById(45708301);
 //print_r($new_lead) . '<br>';
 
-$contact = $client->contact()->create(['first_name' => 'Vladimir', 'last_name' => 'Putin']);
-$client->contact()->update($contact);
+$contact = $client->contact();
+
+//$entity = $contact->create(['name' => 'NAME']);
+//$contact->update($entity);

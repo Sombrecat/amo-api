@@ -2,7 +2,7 @@
 
 namespace Jarvis\AmoApi;
 
-use Jarvis\AmoApi\Entitys\Contact;
+use Jarvis\AmoApi\Entitys\Lead;
 
 class AmoClient
 {
@@ -148,11 +148,11 @@ class AmoClient
     }
 
     /**
-     * @return Contact - вызываем конструктор класса Contact
+     * @return Lead - вызываем конструктор класса Contact
      */
-    public function contact(): Contact
+    public function contact(): Lead
     {
-        return new Contact($this);
+        return new Lead($this);
     }
 
 }

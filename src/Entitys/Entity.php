@@ -27,7 +27,7 @@ class Entity
         return AmoClient::sendRequest($url, 'GET', [], $this->access_token);
     }
 
-    public function create(array $data = [])
+    public function create(array $data = []): array
     {
         $response = AmoClient::sendRequest(static::$req_url, 'POST', [$data], $this->access_token);
 
@@ -40,5 +40,4 @@ class Entity
 
         return AmoClient::sendRequest($url, 'PATCH', [$data], $this->access_token);
     }
-
 }
