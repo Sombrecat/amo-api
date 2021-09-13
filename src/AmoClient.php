@@ -2,7 +2,11 @@
 
 namespace Jarvis\AmoApi;
 
+use Jarvis\AmoApi\Entitys\Company;
+use Jarvis\AmoApi\Entitys\Contact;
 use Jarvis\AmoApi\Entitys\Lead;
+use Jarvis\AmoApi\Entitys\Note;
+use Jarvis\AmoApi\Entitys\Task;
 
 class AmoClient
 {
@@ -147,12 +151,29 @@ class AmoClient
         return $token_data['access_token'];
     }
 
-    /**
-     * @return Lead - вызываем конструктор класса Contact
-     */
-    public function contact(): Lead
+    public function contact(): Contact
+    {
+        return new Contact($this);
+    }
+
+    public function lead(): Lead
     {
         return new Lead($this);
+    }
+
+    public function company(): Company
+    {
+        return new Company($this);
+    }
+
+    public function task(): Task
+    {
+        return new Task($this);
+    }
+
+    public function note(): Note
+    {
+        return new Note($this);
     }
 
 }
